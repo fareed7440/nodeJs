@@ -28,14 +28,15 @@ router.route('/bears')
 
         var bear = new Bear();
 
-        console.log("This request body", req.body);
-        bear.name = req.body.data.data;
-        console.log('response', req.body.data.data)
+        console.log("This request body", req.body.data);
+//var assign  = req.body.data;
+        bear.data =req.body.data
 
-        console.log("here is ", bear)
-        bear.save(function (err) { 
+        console.log("here is ",  req.body.data)
+        bear.save(function (err,bear) { 
             if (err)
                 res.send(err)
+                res.json(bear);
             res.json({ message: 'Bear created!' });
             // Bear.find(function (err, bears) {
             //     if (err)
@@ -46,6 +47,7 @@ router.route('/bears')
             //res.json({ message: 'Bear created!' });
         })
     })
+    router.route('/get')
     .get(function (req, res) {
         console.log("request");
         Bear.find(function (err, bears) {
@@ -53,6 +55,7 @@ router.route('/bears')
                 res.send(err);
             console.log(bears);
             res.json(bears);
+        
         });
     });
 
@@ -87,8 +90,10 @@ router.route('/bears/:bear_id')
     })
 
     .delete(function (req, res) {
+         console.log('id here',req.body)
         Bear.remove({
             _id: req.params.bear_id
+           
         }, function (err, bear) {
             if (err)
                 res.send(err);
